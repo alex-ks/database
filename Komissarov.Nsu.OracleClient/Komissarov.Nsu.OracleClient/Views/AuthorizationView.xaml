@@ -4,14 +4,16 @@
         xmlns:cal="http://www.caliburnproject.org"
         Title="AuthorizationView" Height="300" Width="300">
     <Grid>
-        <StackPanel>
+        <StackPanel Margin="10">
+            <TextBlock Text="Data source"/>
+            <TextBox Text="{Binding DataSource}"/>
             <TextBlock Text="User name"/>
             <TextBox Text="{Binding UserName}"/>
             <TextBlock Text="Password"/>
-            <TextBox Text="{Binding Password}"/>
+            <PasswordBox Name="passwordBox" PasswordChar="*" />
             <TextBlock Text="Tablespace"/>
             <TextBox Text="{Binding Tablespace}"/>
-            <Button cal:Message.Attach="LogIn">Log in</Button>
+            <Button Margin="0, 10, 0, 10" cal:Message.Attach="LogIn">Log in</Button>
         </StackPanel>
     </Grid>
 </Window>
