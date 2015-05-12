@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data;
-using System.IO;
 using Oracle.ManagedDataAccess.Client;
+using Komissarov.Nsu.OracleClient.Accessor;
 
-namespace Komissarov.Nsu.OracleClient
+namespace Komissarov.Nsu.OracleClient.Test
 {
 	class Launcher
 	{
@@ -16,11 +16,11 @@ namespace Komissarov.Nsu.OracleClient
 			builder.UserID = @"12201";
 			builder.PersistSecurityInfo = true;
 
-			//using ( OracleAccessor connector = new OracleAccessor( "10.4.0.119", "12201", "123456", "USERS" ) )
-			//{
-			//	foreach ( string table in connector.GetAvaliableTables( ) )
-			//		Console.WriteLine( table );
-			//}
+			using ( OracleAccessor connector = new OracleAccessor( "10.4.0.119", "12201", "123456", "USERS" ) )
+			{
+				foreach ( string table in connector.GetAvaliableTables( ) )
+					Console.WriteLine( table );
+			}
 
 			using ( OracleConnection connection = new OracleConnection( builder.ToString( ) ) )
 			{

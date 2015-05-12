@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Komissarov.Nsu.OracleClient.Test", "Komissarov.Nsu.OracleClient.Test\Komissarov.Nsu.OracleClient.Test.csproj", "{1786898D-F995-4472-B9D2-28FC489AB39F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Komissarov.Nsu.OracleClient.Accessor", "Komissarov.Nsu.OracleClient.Accessor\Komissarov.Nsu.OracleClient.Accessor.csproj", "{3DAF70CC-7D08-4CC2-B46E-0FA01C68206F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1786898D-F995-4472-B9D2-28FC489AB39F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1786898D-F995-4472-B9D2-28FC489AB39F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1786898D-F995-4472-B9D2-28FC489AB39F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DAF70CC-7D08-4CC2-B46E-0FA01C68206F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DAF70CC-7D08-4CC2-B46E-0FA01C68206F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DAF70CC-7D08-4CC2-B46E-0FA01C68206F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DAF70CC-7D08-4CC2-B46E-0FA01C68206F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

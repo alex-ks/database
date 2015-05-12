@@ -4,9 +4,9 @@ using System.Data.Common;
 using System.Linq;
 using Oracle.ManagedDataAccess.Client;
 
-namespace Komissarov.Nsu.OracleClient.Test
+namespace Komissarov.Nsu.OracleClient.Accessor
 {
-	class OracleAccessor : IDisposable
+	public class OracleAccessor : IDisposable
 	{
 		private OracleConnection _connection;
 		private List<string> _avaliableTables;
