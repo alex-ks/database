@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Komissarov.Nsu.OracleClient
+namespace Komissarov.Nsu.OracleClient.Views
 {
 	/// <summary>
-	/// Interaction logic for MainWindow.xaml
+	/// Interaction logic for AuthorizationView.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class AuthorizationView : Window
 	{
-		public MainWindow( )
+		public AuthorizationView( )
 		{
 			InitializeComponent( );
 		}
