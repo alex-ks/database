@@ -2,8 +2,31 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cal="http://www.caliburnproject.org"
-        Title="MainView" Height="300" Width="300">
+        Title="MainView" Height="300" Width="508.8">
     <Grid>
-        <TextBlock Text="{Binding Stub}"/>
+        <TabControl>
+            <TabItem Header="Start page">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0" Content="Log in" cal:Message.Attach="LogIn" IsEnabled="{Binding Disconnected}" Margin="30"></Button>
+                    <Button Grid.Row="1" Content="Log out" cal:Message.Attach="LogOut" IsEnabled="{Binding Connected}" Margin="30"></Button>
+                </Grid>
+
+            </TabItem>
+
+            <TabItem Header="Table names" IsEnabled="{Binding Connected}">
+                <ScrollViewer>
+                    <TextBlock Text="{Binding Stub}" Margin="0,0,0,-0.2"/>
+                </ScrollViewer>
+            </TabItem>
+            
+            <TabItem Header="Button">
+                <Button Content="Click me!" cal:Message.Attach="MakeReport"></Button>
+            </TabItem>
+        </TabControl>
+        
     </Grid>
 </Window>

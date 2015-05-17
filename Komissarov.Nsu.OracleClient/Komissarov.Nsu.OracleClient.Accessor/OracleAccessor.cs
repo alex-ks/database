@@ -29,15 +29,13 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 			_connection.Open( );
 		}
 
-		public void ExecuteQuery( string query )
+		public OracleDataReader ExecuteQuery( string query )
 		{
-			//todo: implement query execution
-
-			//using ( var command = _connection.CreateCommand( ) )
-			//{
-			//	command.CommandText = query;
-
-			//}
+			using ( var command = _connection.CreateCommand( ) )
+			{
+				command.CommandText = query;
+				return command.ExecuteReader( );
+			}
 		}
 
 		public List<string> GetAvaliableTables( )
@@ -54,7 +52,7 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 				using ( var dataReader = command.ExecuteReader( ) )
 				{
 					var names = from DbDataRecord row in dataReader
-								where row[row.GetOrdinal( "owner" )].ToString( ).Equals( _userId )
+								where !row[row.GetOrdinal( "owner" )].ToString( ).Equals( "SYS" )
 								&& ( _tablespace == null || row[row.GetOrdinal( "tablespace_name" )].ToString( ).Equals( _tablespace ) )
 								orderby row[row.GetOrdinal( "table_name" )]
 								select row[row.GetOrdinal( "table_name" )].ToString( );

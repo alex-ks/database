@@ -9,7 +9,7 @@ using Komissarov.Nsu.OracleClient.ViewModels;
 
 namespace Komissarov.Nsu.OracleClient
 {
-	class AppBootstrapper : AutofacBootstrapper<AuthorizationViewModel>
+	class AppBootstrapper : AutofacBootstrapper<MainViewModel>
 	{
 
 	}

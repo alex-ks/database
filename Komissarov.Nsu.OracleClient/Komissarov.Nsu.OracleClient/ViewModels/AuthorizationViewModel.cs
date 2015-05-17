@@ -14,7 +14,6 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 	class AuthorizationViewModel : Screen//, IViewAware
 	{
 		private string _dataSource, _userName, _tablespace;
-		private IWindowManager _manager;
 
 		public string DataSource
 		{
@@ -33,7 +32,10 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 
 		public string UserName
 		{
-			get { return _userName; }
+			get
+			{
+				return _userName;
+			}
 			set
 			{
 				if ( value == _userName )
@@ -58,37 +60,44 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 			}
 		}
 
-		public AuthorizationViewModel( IWindowManager winManager )
+		public string Password
 		{
-			_manager = winManager;
+			get
+			{
+				var authorizationView = GetView( ) as AuthorizationView;
+
+				if ( authorizationView == null )
+					throw new ArgumentException( "Can't get the password" );
+
+				return authorizationView.passwordBox.Password;
+			}
+		}
+
+		public OracleAccessor Accessor
+		{
+			get;
+			private set;
+		}
+
+		public AuthorizationViewModel( )
+		{
 			DataSource = "10.4.0.119";
 			UserName = "12201";
+			Accessor = null;
 		}
 
 		public void LogIn( )
 		{
-			var authorizationView = GetView( ) as AuthorizationView;
-			if ( authorizationView == null )
-			{
-				MessageBox.Show( "Absolutely unexpected fatal error!", "Error" );
-				return;	
-			}
-
-			PasswordBox box = authorizationView.passwordBox;
-
-			OracleAccessor accessor = null;
-
 			try
 			{
-				accessor = new OracleAccessor( _dataSource, _userName, box.Password, _tablespace );
+				Accessor = new OracleAccessor( DataSource, UserName, Password, Tablespace );
 			}
 			catch ( Exception e )
 			{
-				int i = 5;
+				MessageBox.Show( e.Message, "Error" );
 			}
 			
-			
-			_manager.ShowWindow( new MainViewModel( _manager, accessor ) );
+			TryClose( );
 		}
 	}
 }
