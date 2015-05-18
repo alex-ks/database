@@ -7,10 +7,11 @@ using System.Windows;
 using System.Windows.Controls;
 using Caliburn.Micro;
 using Komissarov.Nsu.OracleClient.Accessor;
+using Komissarov.Nsu.OracleClient.ViewModels.Tabs;
 
 namespace Komissarov.Nsu.OracleClient.ViewModels
 {
-	class MainViewModel : PropertyChangedBase
+	class MainViewModel : PropertyChangedBase, IAccessProvider
 	{
 		private IWindowManager _manager;
 		private OracleAccessor _accessor;
@@ -61,11 +62,21 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 			}
 		}
 
+		//Tabs properties
+
+		public QueryViewModel QueryTab
+		{
+			set;
+			get;
+		}
+
 		public MainViewModel( IWindowManager manager )
 		{
 			_manager = manager;
 			_accessor = null;
 			Connected = false;
+			QueryTab = new QueryViewModel( _manager, this );
+			QueryTab.Disconnected += DisconnectedHandler;
 		}
 
 		public void LogOut( )
@@ -94,6 +105,16 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 		public void MakeReport( )
 		{
 			MessageBox.Show( "WAAAAAAAGH!", "Report" );
+		}
+
+		public void DisconnectedHandler( )
+		{
+			//todo: handle disconnect
+		}
+
+		public OracleAccessor Accessor
+		{
+			get { return _accessor; }
 		}
 	}
 }

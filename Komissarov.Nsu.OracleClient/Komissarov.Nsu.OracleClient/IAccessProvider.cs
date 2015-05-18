@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Caliburn.Micro;
-using Caliburn.Micro.Autofac;
-using Autofac;
 using Komissarov.Nsu.OracleClient.Accessor;
-using Komissarov.Nsu.OracleClient.ViewModels;
 
 namespace Komissarov.Nsu.OracleClient
 {
-	class AppBootstrapper : AutofacBootstrapper<MainViewModel>
+	interface IAccessProvider
 	{
-		
+		OracleAccessor Accessor
+		{
+			get;
+		}
 	}
 }
