@@ -12,7 +12,7 @@
             <RowDefinition Height="10*"></RowDefinition>
         </Grid.RowDefinitions>
         <ScrollViewer Grid.Row="0">
-            <TextBox Text="{Binding Query}"/>
+            <TextBox Text="{Binding Query}" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
         </ScrollViewer>
         <Button Grid.Row="1" Content="Execute" HorizontalAlignment="Right" Width="60" Margin="3" cal:Message.Attach="ExecuteQuery"/>
     </Grid>

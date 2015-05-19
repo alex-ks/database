@@ -11,8 +11,8 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Button Grid.Row="0" Content="Log in" cal:Message.Attach="LogIn" IsEnabled="{Binding Disconnected}" Margin="30"></Button>
-                    <Button Grid.Row="1" Content="Log out" cal:Message.Attach="LogOut" IsEnabled="{Binding Connected}" Margin="30"></Button>
+                    <Button Grid.Row="0" Content="Log in" cal:Message.Attach="LogIn" IsEnabled="{Binding Disconnected}" Margin="200 50"></Button>
+                    <Button Grid.Row="1" Content="Log out" cal:Message.Attach="LogOut" IsEnabled="{Binding Connected}" Margin="200 50"></Button>
                 </Grid>
 
             </TabItem>
