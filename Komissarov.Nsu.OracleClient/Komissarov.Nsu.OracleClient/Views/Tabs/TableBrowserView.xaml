@@ -6,13 +6,21 @@
              mc:Ignorable="d" 
              d:DesignHeight="473.225" d:DesignWidth="683.405">
     <Grid>
-        <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*"></RowDefinition>
-                <RowDefinition Height="44*"></RowDefinition>
+                <RowDefinition Height="23"></RowDefinition>
+                <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <TextBox Grid.Row="0" Text="{Binding SearchCriteria, UpdateSourceTrigger=PropertyChanged}"/>
             <ListBox Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding TableNames}" SelectedItem="{Binding SelectedItem}"/>
         </Grid>
+        <TabControl Grid.Column="1">
+            <TabItem Header="Table"></TabItem>
+            <TabItem Header="Data"></TabItem>
+        </TabControl>
     </Grid>
 </UserControl>
