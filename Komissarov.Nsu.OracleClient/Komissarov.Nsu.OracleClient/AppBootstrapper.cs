@@ -13,6 +13,11 @@ namespace Komissarov.Nsu.OracleClient
 {
 	class AppBootstrapper : AutofacBootstrapper<MainViewModel>
 	{
-		
+		protected override void ConfigureContainer( ContainerBuilder builder )
+		{
+			base.ConfigureContainer( builder );
+			builder.RegisterType<MainViewModel>( ).AsSelf( ).SingleInstance( );
+			builder.RegisterType<MainViewModel>( ).As<IAccessProvider>( ).SingleInstance( );
+		}
 	}
 }

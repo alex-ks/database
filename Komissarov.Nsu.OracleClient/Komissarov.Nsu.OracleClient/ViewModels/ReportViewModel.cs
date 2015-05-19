@@ -13,12 +13,18 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 		public OracleDataReader DataReader
 		{
 			get;
-			set;
+			private set;
 		}
 
 		public ReportViewModel( OracleDataReader reader )
 		{
 			DataReader = reader;
+		}
+
+		~ReportViewModel( )
+		{
+			DataReader.Dispose( );
+			DataReader = null;
 		}
 	}
 }

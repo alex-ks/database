@@ -37,8 +37,8 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			try
 			{
 				var dataReader = _provider.Accessor.ExecuteQuery( Query );
-				//todo: report creation
-				dataReader.Dispose( );
+				ReportViewModel report = new ReportViewModel( dataReader );
+				_manager.ShowDialog( report );
 			}
 			catch ( OracleException e )
 			{
