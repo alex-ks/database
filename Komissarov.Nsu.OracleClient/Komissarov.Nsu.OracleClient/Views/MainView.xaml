@@ -17,18 +17,16 @@
 
             </TabItem>
 
-            <TabItem Header="Table names" IsEnabled="{Binding Connected}">
-                <ScrollViewer>
-                    <TextBlock Text="{Binding Stub}"/>
-                </ScrollViewer>
-            </TabItem>
-            
-            <TabItem Header="Button">
-                <Button Content="Click me!" cal:Message.Attach="MakeReport"></Button>
+            <TabItem Header="Table browser" IsEnabled="{Binding Connected}">
+                <ContentControl cal:View.Model="{Binding Browser}"/>
             </TabItem>
 
             <TabItem Header="Execute query" IsEnabled="{Binding Connected}">
                 <ContentControl cal:View.Model="{Binding QueryTab}"/>
+            </TabItem>
+
+            <TabItem Header="Button">
+                <Button Content="Click me!" cal:Message.Attach="MakeReport"></Button>
             </TabItem>
         </TabControl>
         

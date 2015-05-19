@@ -16,21 +16,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 		private IWindowManager _manager;
 		private OracleAccessor _accessor;
 
-		private string _stub;
-		public string Stub
-		{
-			get
-			{
-				return _stub;
-			}
-			set
-			{
-				if ( value == _stub )
-					return;
-				_stub = value;
-				NotifyOfPropertyChange( ( ) => Stub );
-			}
-		}
+		public event ConnectHandler ConnectEvent;
 
 		private bool _connected;
 
@@ -45,6 +31,8 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 				if ( value == _connected )
 					return;
 				_connected = value;
+				if ( value && ConnectEvent != null )
+					ConnectEvent( );
 				NotifyOfPropertyChange( ( ) => Connected );
 				NotifyOfPropertyChange( ( ) => Disconnected );
 			}
@@ -70,13 +58,22 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 			get;
 		}
 
+		public TableBrowserViewModel Browser
+		{
+			set;
+			get;
+		}
+
 		public MainViewModel( IWindowManager manager )
 		{
 			_manager = manager;
 			_accessor = null;
 			Connected = false;
+
 			QueryTab = new QueryViewModel( _manager, this );
 			QueryTab.Disconnected += DisconnectedHandler;
+			Browser = new TableBrowserViewModel( _manager, this );
+			Browser.Disconnected += DisconnectedHandler;
 		}
 
 		public void LogOut( )
@@ -94,12 +91,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 			_accessor = authorization.Accessor;
 
 			if ( _accessor != null )
-			{
 				Connected = true;
-
-				foreach ( var name in _accessor.GetAvaliableTables( ) )
-					Stub += name + '\n';
-			}
 		}
 
 		public void MakeReport( )
@@ -114,7 +106,10 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 
 		public OracleAccessor Accessor
 		{
-			get { return _accessor; }
+			get
+			{
+				return _accessor;
+			}
 		}
 	}
 }
