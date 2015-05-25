@@ -59,8 +59,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			catch( OracleException e )
 			{
 				_provider.ReportError( e.Message );
-			}
-			
+			}	
 		}
 
 		public event DisconnectHandler Disconnected;

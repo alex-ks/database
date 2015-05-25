@@ -96,6 +96,9 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 
 		public void ConnectHander( )
 		{
+			SelectedItem = null;
+			SearchCriteria = null;
+			TableContent = null;
 			NotifyOfPropertyChange( ( ) => TableNames );
 		}
 

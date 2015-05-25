@@ -15,8 +15,8 @@
         <DataGrid Grid.Column="0" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn" ItemsSource="{Binding TableContent}"/>
         
         <StackPanel Grid.Column="1">
-            <Button Content="Commit" Margin="5" cal:Message.Attach="CommitChanges"/>
-            <Button Content="Revert" Margin="5" cal:Message.Attach="RevertChanges"/>
+            <Button Content="Commit" Height="30" Margin="5" cal:Message.Attach="CommitChanges"/>
+            <Button Content="Revert" Height="30" Margin="5" cal:Message.Attach="RevertChanges"/>
         </StackPanel>
     </Grid>
 </UserControl>

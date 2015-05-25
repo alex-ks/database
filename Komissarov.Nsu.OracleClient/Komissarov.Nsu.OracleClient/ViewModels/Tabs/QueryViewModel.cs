@@ -2,6 +2,8 @@
 using System.Windows;
 using Caliburn.Micro;
 using Oracle.ManagedDataAccess.Client;
+using Microsoft.Win32;
+using System.IO;
 
 namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 {
@@ -42,7 +44,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			}
 			catch ( OracleException e )
 			{
-				MessageBox.Show( e.Message, "Error" );
+				_provider.ReportError( e.Message );
 				if ( Disconnected != null )
 					Disconnected( );
 			}
@@ -54,6 +56,27 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			{
 				_provider.ReportError( "Connection error" );
 			}	
+		}
+
+		public void SaveQuery( )
+		{
+			SaveFileDialog saveFileDialog = new SaveFileDialog( );
+			saveFileDialog.DefaultExt = "sql";
+			saveFileDialog.Filter = "SQL script|*.sql";
+			saveFileDialog.AddExtension = true;
+
+			if ( saveFileDialog.ShowDialog( ) == true )
+				File.WriteAllText( saveFileDialog.FileName, Query );
+		}
+
+		public void LoadQuery( )
+		{
+			OpenFileDialog openFileDialog = new OpenFileDialog( );
+			openFileDialog.Filter = "SQL script|*.sql|All files|*";
+			openFileDialog.ValidateNames = true;
+
+			if ( openFileDialog.ShowDialog( ) == true )
+				Query = File.ReadAllText( openFileDialog.FileName );
 		}
 	}
 }
