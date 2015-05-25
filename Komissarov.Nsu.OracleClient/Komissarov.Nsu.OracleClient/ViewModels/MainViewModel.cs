@@ -96,9 +96,14 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 
 		public void MakeReport( )
 		{
-			ReportViewModel report = new ReportViewModel( _accessor.GetTableInfo( "ROGOLEV_GOODS" ) );
-			_manager.ShowDialog( report );
-			//MessageBox.Show( "WAAAAAAAGH!", "Report" );
+			ReportViewModel report;
+			if ( _accessor != null )
+			{
+				report = new ReportViewModel( _accessor.GetTableInfo( "ROGOLEV_GOODS" ) );
+				_manager.ShowDialog( report );
+			}
+			else	
+				MessageBox.Show( "WAAAAAAAGH!", "Report" );
 		}
 
 		public void ReportError( string message )
