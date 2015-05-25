@@ -90,6 +90,7 @@
     </Compile>
     <Compile Include="ViewModels\ReportViewModel.cs" />
     <Compile Include="ViewModels\Tabs\TableBrowserViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\TableContentViewModel.cs" />
     <Compile Include="Views\AuthorizationView.xaml.cs">
       <DependentUpon>AuthorizationView.xaml</DependentUpon>
     </Compile>
@@ -107,6 +108,9 @@
     </Compile>
     <Compile Include="Views\Tabs\TableBrowserView.xaml.cs">
       <DependentUpon>TableBrowserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\TableContentView.xaml.cs">
+      <DependentUpon>TableContentView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +163,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\TableBrowserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\TableContentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

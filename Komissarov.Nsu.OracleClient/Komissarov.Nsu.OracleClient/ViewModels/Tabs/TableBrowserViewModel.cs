@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Caliburn.Micro;
+using Oracle.ManagedDataAccess.Client;
+using System.Windows;
 
 namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 {
@@ -23,20 +25,36 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			}
 		}
 
+		private string _item;
 		public string SelectedItem
 		{
-			get;
-			set;
+			set
+			{
+				if ( _item == value )
+					return;
+				_item = value;
+				NotifyOfPropertyChange( ( ) => SelectedItem );
+				if ( _item == null )
+					return;
+				try
+				{
+					TableContent = new TableContentViewModel( _provider, _item );
+				}
+				catch( OracleException e )
+				{
+					TableContent = null;
+					_provider.ReportError( e.Message );
+				}
+			}
+			get
+			{
+				return _item;
+			}
 		}
 
 		private string _criteria;
 		public string SearchCriteria
 		{
-			get
-			{
-				return _criteria;
-			}
-
 			set
 			{
 				if ( value == _criteria )
@@ -45,6 +63,27 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 				_criteria = value;
 				NotifyOfPropertyChange( ( ) => SearchCriteria );
 				NotifyOfPropertyChange( ( ) => TableNames );
+			}
+
+			get
+			{
+				return _criteria;
+			}
+		}
+
+		private TableContentViewModel _tableContent;
+		public TableContentViewModel TableContent
+		{
+			set
+			{
+				if ( value == _tableContent )
+					return;
+				_tableContent = value;
+				NotifyOfPropertyChange( ( ) => TableContent );
+			}
+			get
+			{
+				return _tableContent;
 			}
 		}
 

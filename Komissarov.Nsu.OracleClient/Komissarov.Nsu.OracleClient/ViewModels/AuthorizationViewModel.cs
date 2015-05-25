@@ -94,7 +94,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 			}
 			catch ( Exception e )
 			{
-				MessageBox.Show( e.Message, "Error" );
+				MessageBox.Show( e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error );
 			}
 			
 			TryClose( );

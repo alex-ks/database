@@ -17,5 +17,7 @@ namespace Komissarov.Nsu.OracleClient
 		{
 			get;
 		}
+
+		void ReportError( string message );
 	}
 }

@@ -48,11 +48,11 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			}
 			catch ( InvalidOperationException )
 			{
-				MessageBox.Show( "Invalid query text", "Error" );
+				_provider.ReportError( "Invalid query text" );
 			}
 			catch ( NullReferenceException )
 			{
-				MessageBox.Show( "Connection error", "Error" );
+				_provider.ReportError( "Connection error" );
 			}	
 		}
 	}

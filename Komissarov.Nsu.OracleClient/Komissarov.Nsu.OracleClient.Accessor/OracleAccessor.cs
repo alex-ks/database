@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using Oracle.ManagedDataAccess.Client;
+using System.Data;
 
 namespace Komissarov.Nsu.OracleClient.Accessor
 {
@@ -75,6 +76,34 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 			{
 				command.CommandText = string.Format( _loader.InfoGettingQuery, tableName );
 				return command.ExecuteReader( );
+			}
+		}
+
+		public DataTable GetTableContent( string tableName )
+		{
+			using ( OracleCommand command = _connection.CreateCommand( ) )
+			{
+				command.CommandText = string.Format( "select * from {0}", tableName );
+				using ( OracleDataAdapter adapter = new OracleDataAdapter( command ) )
+				{
+					DataTable table = new DataTable( );
+					adapter.Fill( table );
+					return table;
+				}
+			}
+		}
+
+		public void UpdateTableContent( string tableName, DataTable table )
+		{
+			using ( OracleCommand command = _connection.CreateCommand( ) )
+			{
+				command.CommandText = string.Format( "select * from {0}", tableName );
+				using ( OracleDataAdapter adapter = new OracleDataAdapter( command ) )
+				{
+					OracleCommandBuilder builder = new OracleCommandBuilder( adapter );
+					adapter.UpdateCommand = builder.GetUpdateCommand( );
+					adapter.Update( table );
+				}
 			}
 		}
 

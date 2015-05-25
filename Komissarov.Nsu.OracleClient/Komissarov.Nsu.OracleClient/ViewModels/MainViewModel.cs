@@ -101,6 +101,11 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 			//MessageBox.Show( "WAAAAAAAGH!", "Report" );
 		}
 
+		public void ReportError( string message )
+		{
+			MessageBox.Show( message, "Error", MessageBoxButton.OK, MessageBoxImage.Error );
+		}
+
 		public void DisconnectedHandler( )
 		{
 			//todo: handle disconnect
