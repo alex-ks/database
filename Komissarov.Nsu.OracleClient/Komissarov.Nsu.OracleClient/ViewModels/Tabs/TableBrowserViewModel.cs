@@ -17,6 +17,8 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 		{
 			get
 			{
+				if ( _provider.Accessor == null )
+					return null;
 				return _provider.Accessor.GetAvaliableTables( ).Where( str => SearchCriteria == null || str.ToLower( ).Contains( SearchCriteria.ToLower( ) ) );
 			}
 		}

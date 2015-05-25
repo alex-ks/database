@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.IO;
 using System.Linq;
+using System.Xml;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Komissarov.Nsu.OracleClient.Accessor
@@ -12,9 +14,13 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 		private List<string> _avaliableTables;
 		private string _userId;
 		private string _tablespace;
+		private StringLoader _loader;
+		//private string _infoGettingQuery;
 
 		public OracleAccessor( string dataSource, string userId, string password, string tablespace = null )
 		{
+			_loader = new StringLoader( );
+
 			_avaliableTables = null;
 			_userId = userId;
 			_tablespace = tablespace;
@@ -61,6 +67,15 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 				}
 			}
 			return _avaliableTables;
+		}
+
+		public OracleDataReader GetTableInfo( string tableName )
+		{
+			using ( var command = _connection.CreateCommand( ) )
+			{
+				command.CommandText = string.Format( _loader.InfoGettingQuery, tableName );
+				return command.ExecuteReader( );
+			}
 		}
 
 		public void Dispose( )

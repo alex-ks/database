@@ -96,7 +96,9 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 
 		public void MakeReport( )
 		{
-			MessageBox.Show( "WAAAAAAAGH!", "Report" );
+			ReportViewModel report = new ReportViewModel( _accessor.GetTableInfo( "ROGOLEV_GOODS" ) );
+			_manager.ShowDialog( report );
+			//MessageBox.Show( "WAAAAAAAGH!", "Report" );
 		}
 
 		public void DisconnectedHandler( )

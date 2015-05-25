@@ -10,24 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Komissarov.Nsu.OracleClient.Views
+namespace Komissarov.Nsu.OracleClient.Views.Tabs
 {
 	/// <summary>
-	/// Interaction logic for ReportView.xaml
+	/// Interaction logic for ColumnView.xaml
 	/// </summary>
-	public partial class ReportView : Window
+	public partial class ColumnView : UserControl
 	{
-		public ReportView( )
+		public ColumnView( )
 		{
 			InitializeComponent( );
-		}
-
-		private void DataGrid_AutoGeneratingColumn( object sender, DataGridAutoGeneratingColumnEventArgs e )
-		{
-			string header = e.Column.Header.ToString( );
-			e.Column.Header = header.Replace( "_", "__" );
 		}
 	}
 }

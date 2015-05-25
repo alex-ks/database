@@ -84,6 +84,7 @@
     <Compile Include="IConnected.cs" />
     <Compile Include="ViewModels\AuthorizationViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\ColumnViewModel.cs" />
     <Compile Include="ViewModels\Tabs\QueryViewModel.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -94,6 +95,9 @@
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\ColumnView.xaml.cs">
+      <DependentUpon>ColumnView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\QueryView.xaml.cs">
       <DependentUpon>QueryView.xaml</DependentUpon>
@@ -139,6 +143,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\ColumnView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

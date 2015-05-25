@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ReportView">
     <Grid>
-        <DataGrid ItemsSource="{Binding DataReader}">
+        <DataGrid ItemsSource="{Binding DataReader}" AutoGenerateColumns="True" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"/>
 
-        </DataGrid>
+
     </Grid>
 </Window>
