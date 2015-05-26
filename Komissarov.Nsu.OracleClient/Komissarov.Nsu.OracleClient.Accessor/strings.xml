@@ -18,11 +18,11 @@
     (
     SELECT foreign_key, foreign_name, table_name AS source_table, column_name AS source_column FROM
     (
-    SELECT constraint_type AS foreign_key, column_name AS foreign_name, r_constraint_name
+    SELECT constraint_type AS foreign_key, column_name AS foreign_name, r_constraint_name, position AS ref_position
     FROM all_cons_columns INNER JOIN all_constraints
     ON all_cons_columns.table_name = all_constraints.table_name AND all_cons_columns.constraint_name = all_constraints.constraint_name
     AND constraint_type = 'R' AND all_constraints.table_name = '{0}'
-    ) INNER JOIN all_cons_columns ON r_constraint_name = all_cons_columns.constraint_name AND column_name = foreign_name
+    ) INNER JOIN all_cons_columns ON r_constraint_name = all_cons_columns.constraint_name AND position = ref_position
     ) ON column_name = foreign_name
   </string>
   <string name="TypeGettingQuery">
