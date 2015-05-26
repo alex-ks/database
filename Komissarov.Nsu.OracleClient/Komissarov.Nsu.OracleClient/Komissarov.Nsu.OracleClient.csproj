@@ -87,21 +87,19 @@
     <Compile Include="IConnected.cs" />
     <Compile Include="ViewModels\AuthorizationViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\ColumnViewModel.cs" />
+    <Compile Include="Models\Column.cs" />
     <Compile Include="ViewModels\Tabs\QueryViewModel.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModels\ReportViewModel.cs" />
     <Compile Include="ViewModels\Tabs\TableBrowserViewModel.cs" />
     <Compile Include="ViewModels\Tabs\TableContentViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\TableEditorViewModel.cs" />
     <Compile Include="Views\AuthorizationView.xaml.cs">
       <DependentUpon>AuthorizationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\ColumnView.xaml.cs">
-      <DependentUpon>ColumnView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\QueryView.xaml.cs">
       <DependentUpon>QueryView.xaml</DependentUpon>
@@ -114,6 +112,9 @@
     </Compile>
     <Compile Include="Views\Tabs\TableContentView.xaml.cs">
       <DependentUpon>TableContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\TableEditorView.xaml.cs">
+      <DependentUpon>TableEditorView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -153,10 +154,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\ColumnView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Tabs\QueryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -170,6 +167,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\TableContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\TableEditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

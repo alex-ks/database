@@ -12,7 +12,7 @@
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
         
-        <DataGrid Grid.Column="0" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn" ItemsSource="{Binding TableContent}"/>
+        <DataGrid Grid.Column="0" CanUserReorderColumns="False" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn" ItemsSource="{Binding TableContent}"/>
         
         <StackPanel Grid.Column="1">
             <Button Content="Commit" Height="30" Margin="5" cal:Message.Attach="CommitChanges"/>

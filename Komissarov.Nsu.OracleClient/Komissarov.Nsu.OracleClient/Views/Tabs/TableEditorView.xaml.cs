@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Komissarov.Nsu.OracleClient.Views.Tabs
 {
 	/// <summary>
-	/// Interaction logic for ColumnView.xaml
+	/// Interaction logic for TableEditorView.xaml
 	/// </summary>
-	public partial class ColumnView : UserControl
+	public partial class TableEditorView : UserControl
 	{
-		public ColumnView( )
+		public TableEditorView( )
 		{
 			InitializeComponent( );
 		}

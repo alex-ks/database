@@ -25,4 +25,8 @@
       ) INNER JOIN all_cons_columns ON r_constraint_name = all_cons_columns.constraint_name
     ) ON column_name = foreign_name
   </string>
+  <string name="TypeGettingQuery">
+    SELECT type_name FROM all_types
+    WHERE owner IS NULL
+  </string>
 </strings>

@@ -10,7 +10,16 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 {
 	class StringLoader
 	{
-		public string InfoGettingQuery { get; private set; }
+		public string InfoGettingQuery
+		{
+			get;
+			private set;
+		}
+		public string TypeGettingQuery
+		{
+			get;
+			private set;
+		}
 
 		public StringLoader( )
 		{
@@ -19,7 +28,8 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 			var list = document.GetElementsByTagName( "string" );
 
 			InfoGettingQuery = list[0].InnerText;
+			TypeGettingQuery = list[1].InnerText;
 		}
-		
+
 	}
 }

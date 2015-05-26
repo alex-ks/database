@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
+namespace Komissarov.Nsu.OracleClient.Models
 {
-	class ColumnViewModel
+	class Column
 	{
 		public string Name
 		{

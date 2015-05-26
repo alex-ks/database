@@ -38,10 +38,12 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 					return;
 				try
 				{
+					TableEditor = new TableEditorViewModel( _provider, _item );
 					TableContent = new TableContentViewModel( _provider, _item );
 				}
 				catch( OracleException e )
 				{
+					TableEditor = null;
 					TableContent = null;
 					_provider.ReportError( e.Message );
 				}
@@ -87,6 +89,22 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			}
 		}
 
+		private TableEditorViewModel _tableEditor;
+		public TableEditorViewModel TableEditor
+		{
+			set
+			{
+				if ( value == _tableEditor )
+					return;
+				_tableEditor = value;
+				NotifyOfPropertyChange( ( ) => TableEditor );
+			}
+			get
+			{
+				return _tableEditor;
+			}
+		}
+
 		public TableBrowserViewModel( IWindowManager manager, IAccessProvider provider )
 		{
 			_provider = provider;
@@ -99,6 +117,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			SelectedItem = null;
 			SearchCriteria = null;
 			TableContent = null;
+			TableEditor = null;
 			NotifyOfPropertyChange( ( ) => TableNames );
 		}
 

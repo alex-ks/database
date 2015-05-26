@@ -20,7 +20,9 @@
             <ListBox Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding TableNames}" SelectedItem="{Binding SelectedItem}"/>
         </Grid>
         <TabControl Grid.Column="1">
-            <TabItem Header="Table"></TabItem>
+            <TabItem Header="Table">
+                <ContentControl cal:View.Model="{Binding TableEditor}"/>
+            </TabItem>
             <TabItem Header="Data">
                 <ContentControl cal:View.Model="{Binding TableContent}"/>
             </TabItem>

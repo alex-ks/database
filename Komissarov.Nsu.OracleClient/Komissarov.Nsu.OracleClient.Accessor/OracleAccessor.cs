@@ -13,6 +13,7 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 	{
 		private OracleConnection _connection;
 		private List<string> _avaliableTables;
+		private List<string> _avaliableTypes;
 		private string _userId;
 		private string _tablespace;
 		private StringLoader _loader;
@@ -23,6 +24,7 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 			_loader = new StringLoader( );
 
 			_avaliableTables = null;
+			_avaliableTypes = null;
 			_userId = userId;
 			_tablespace = tablespace;
 
@@ -68,6 +70,29 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 				}
 			}
 			return _avaliableTables;
+		}
+
+		public List<string> GetAvaliableTypes( )
+		{
+			if ( _avaliableTypes != null )
+				return _avaliableTypes;
+
+			_avaliableTypes = new List<string>( );
+
+			using ( var command = _connection.CreateCommand( ) )
+			{
+				command.CommandText = _loader.TypeGettingQuery;
+
+				using ( var dataReader = command.ExecuteReader( ) )
+				{
+					var names = from DbDataRecord row in dataReader
+								orderby row[row.GetOrdinal( "type_name" )]
+								select row[row.GetOrdinal( "type_name" )].ToString( );
+
+					_avaliableTypes = names.ToList( );
+				}
+			}
+			return _avaliableTypes;
 		}
 
 		public OracleDataReader GetTableInfo( string tableName )
