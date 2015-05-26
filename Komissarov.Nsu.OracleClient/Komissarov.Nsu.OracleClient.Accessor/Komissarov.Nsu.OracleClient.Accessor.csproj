@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="strings.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>

@@ -8,18 +8,34 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 {
+	internal delegate void EditHandle( );
+
 	class TableEditorViewModel : PropertyChangedBase
 	{
 		private IAccessProvider _provider;
-		private string _tableName;
+		private bool _created, _nameModified = false;
 
-		public bool Created
+		public event EditHandle TableEdited;
+
+		private string _tableName;
+		public string TableName
 		{
-			private set;
-			get;
+			set
+			{
+				if ( _tableName == value )
+					return;
+
+				_tableName = value;
+				_nameModified = true;
+			}
+			get
+			{
+				return _tableName;
+			}
 		}
 
 		public ObservableCollection<Column> Columns
@@ -42,7 +58,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			get;
 		}
 
-		public List<string> AvaliableTables
+		public IEnumerable<string> AvaliableTables
 		{
 			get
 			{
@@ -80,36 +96,138 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 
 		public TableEditorViewModel( IAccessProvider provider, string tableName )
 		{
-			_provider = provider;
 			if ( tableName == null )
-				Created = true;
+				_created = true;
 			else
-				Created = false;
+				_created = false;
 
-			//stub
-			Columns = new BindableCollection<Column>( );
-			for ( int i = 0; i < 20; ++i )
-				Columns.Add( new Column( )
+			_provider = provider;
+			TableName = tableName;
+
+			LoadTableData( );
+		}
+
+		private void LoadTableData( )
+		{
+			using ( var dataReader = _provider.Accessor.GetTableInfo( TableName ) )
+			{
+				var names = from DbDataRecord row in dataReader
+							select new Column( )
+							{
+								Created = false,
+								Name = row[row.GetOrdinal( "column_name" )].ToString( ),
+								Type = row[row.GetOrdinal( "data_type" )].ToString( ),
+								Length = row[row.GetOrdinal( "data_length" )].ToString( ),
+								Nullable = row[row.GetOrdinal( "nullable" )].ToString( ).Equals( "Y" ),
+								PrimaryKey = row[row.GetOrdinal( "primary_key" )].ToString( ).Equals( "P" ),
+								ForeignKey = row[row.GetOrdinal( "foreign_key" )].ToString( ).Equals( "R" ),
+								SourceTable = row[row.GetOrdinal( "source_table" )].ToString( ),
+								SourceColumn = row[row.GetOrdinal( "source_column" )].ToString( )
+							};
+
+				Columns = new ObservableCollection<Column>( names );
+			}
+		}
+
+		private string AlterTable( )
+		{
+			StringBuilder builder = new StringBuilder( "ALTER TABLE " );
+			//todo: make alter table query
+			return builder.ToString( );
+		}
+
+		private string CreateTable( )
+		{
+			StringBuilder builder = new StringBuilder( "CREATE TABLE " );
+			builder.Append( _tableName ).Append( " ( " );
+
+			List<Column> primaryList = new List<Column>( ),
+				foreignList = new List<Column>( );
+
+			if ( Columns.Count != 0 )
+			{
+				builder.Append( Columns[0].Name ).Append( ' ' )
+					.Append( Columns[0].Type );
+
+				if ( Columns[0].Length != null )
+					builder.Append( "( " ).Append( Columns[0].Length ).Append( " )" );
+				
+				builder.Append( ' ' );
+
+				if ( !Columns[0].Nullable )
+					builder.Append( "NOT NULL" );
+
+				if ( Columns[0].PrimaryKey )
+					primaryList.Add( Columns[0] );
+				if ( Columns[0].ForeignKey )
+					foreignList.Add( Columns[0] );
+
+				for ( int i = 1; i < Columns.Count; ++i )
 				{
-					Name = i.ToString( ),
-					Type = i.ToString( ),
-					ForeignKey = i % 2 == 0
-				} );
+					builder.Append( ", " ).Append( Columns[i].Name ).Append( ' ' )
+						.Append( Columns[i].Type );
+
+					if ( Columns[i].Length != null )
+						builder.Append( "( " ).Append( Columns[i].Length ).Append( " )" );
+					builder.Append( ' ' );
+
+					if ( !Columns[i].Nullable )
+						builder.Append( "NOT NULL" );
+
+					if ( Columns[i].PrimaryKey )
+						primaryList.Add( Columns[i] );
+					if ( Columns[i].ForeignKey )
+						foreignList.Add( Columns[i] );
+				}
+			}
+
+			if ( primaryList.Count != 0 )
+			{
+				builder.Append( ", PRIMARY KEY ( " ).Append( primaryList[0].Name );
+				for ( int i = 1; i < primaryList.Count; ++i )
+					builder.Append( ", " ).Append( primaryList[i] );
+				builder.Append( " )" );
+			}
+
+			if ( foreignList.Count != 0 )
+			{
+				foreach ( Column column in foreignList )
+				{
+					builder.Append( ", FOREIGN KEY ( " ).Append( column.Name ).Append( " ) " )
+						.Append( "REFERENCES " ).Append( column.SourceTable ).Append( "( " )
+						.Append( column.SourceColumn ).Append( " )" );
+				}
+			}
+
+			builder.Append( " )" );
+
+			return builder.ToString( );
 		}
 
 		public void CommitChanges( )
 		{
-			
+			string query = _created ? CreateTable( ) : AlterTable( );
+			try
+			{
+				_provider.Accessor.ExecuteQuery( query ).Dispose( );
+				
+				foreach ( Column column in Columns )
+					column.Created = false;
+
+				if ( TableEdited != null )
+					TableEdited( );
+
+				MessageBox.Show( "Table successfully " + ( _created ? "created" : "edited" ), "Report", MessageBoxButton.OK, MessageBoxImage.Information );
+			}
+			catch ( OracleException e )
+			{
+				_provider.ReportError( e.Message );
+			}
 		}
 
 		public void RevertChanges( )
 		{
-		
-		}
-
-		public void AddNew( )
-		{
-		
+			LoadTableData( );
 		}
 	}
 }

@@ -35,7 +35,8 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			_provider = provider;
 			_tableName = tableName;
 
-			TableContent = _provider.Accessor.GetTableContent( _tableName );
+			if ( tableName != null )
+				TableContent = _provider.Accessor.GetTableContent( _tableName );
 		}
 
 		public void CommitChanges( )

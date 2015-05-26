@@ -132,6 +132,12 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 			}
 		}
 
+		public void ResetAllLists( )
+		{
+			_avaliableTables = null;
+			_avaliableTypes = null;
+		}
+
 		public void Dispose( )
 		{
 			_connection.Dispose( );

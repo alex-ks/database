@@ -9,6 +9,12 @@ namespace Komissarov.Nsu.OracleClient.Models
 {
 	class Column
 	{
+		public bool Created
+		{
+			set;
+			get;
+		}
+
 		public string Name
 		{
 			set;
@@ -16,6 +22,12 @@ namespace Komissarov.Nsu.OracleClient.Models
 		}
 
 		public string Type
+		{
+			set;
+			get;
+		}
+
+		public string Length
 		{
 			set;
 			get;
@@ -49,6 +61,11 @@ namespace Komissarov.Nsu.OracleClient.Models
 		{
 			set;
 			get;
+		}
+
+		public Column( )
+		{
+			Created = true;
 		}
 	}
 }

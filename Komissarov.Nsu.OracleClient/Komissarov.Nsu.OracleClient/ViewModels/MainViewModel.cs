@@ -99,7 +99,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 			ReportViewModel report;
 			if ( _accessor != null )
 			{
-				report = new ReportViewModel( _accessor.GetTableInfo( "ROGOLEV_GOODS" ) );
+				report = new ReportViewModel( _accessor.GetTableInfo( "ROGOLEV_GOODS_RETURNED" ) );
 				_manager.ShowDialog( report );
 			}
 			else	

@@ -15,9 +15,19 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="23"></RowDefinition>
                 <RowDefinition></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
             </Grid.RowDefinitions>
             <TextBox Grid.Row="0" Text="{Binding SearchCriteria, UpdateSourceTrigger=PropertyChanged}"/>
             <ListBox Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding TableNames}" SelectedItem="{Binding SelectedItem}"/>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <Button Grid.Column="0" cal:Message.Attach="AddTable" Content="Add" Margin="5 5 2.5 5"/>
+                <Button Grid.Column="1" cal:Message.Attach="DeleteTable" Content="Delete" Margin="2.5 5 5 5"/>
+            </Grid>
         </Grid>
         <TabControl Grid.Column="1">
             <TabItem Header="Table">

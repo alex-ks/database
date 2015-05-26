@@ -34,8 +34,14 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 					return;
 				_item = value;
 				NotifyOfPropertyChange( ( ) => SelectedItem );
+
 				if ( _item == null )
+				{
+					TableContent = null;
+					TableEditor = null;
 					return;
+				}
+					
 				try
 				{
 					TableEditor = new TableEditorViewModel( _provider, _item );
@@ -43,8 +49,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 				}
 				catch( OracleException e )
 				{
-					TableEditor = null;
-					TableContent = null;
+					SelectedItem = null;
 					_provider.ReportError( e.Message );
 				}
 			}
@@ -112,13 +117,47 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			provider.ConnectEvent += ConnectHander;
 		}
 
+		public void AddTable( )
+		{
+			TableEditor = new TableEditorViewModel( _provider, null );
+			TableEditor.TableEdited += Update;
+			TableContent = new TableContentViewModel( _provider, null );
+		}
+
+		public void DeleteTable( )
+		{
+			if ( SelectedItem == null )
+				return;
+
+			if ( MessageBox.Show( "Are you shure you want to delete table " + SelectedItem + '?', "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question ) == MessageBoxResult.Yes )
+			{
+				try
+				{
+					_provider.Accessor.ExecuteQuery( "DROP TABLE " + SelectedItem );
+					MessageBox.Show( "Table " + SelectedItem + " has been successfully deleted", "Report", MessageBoxButton.OK, MessageBoxImage.Information );
+					SelectedItem = null;
+					Update( );
+				}
+				catch ( OracleException e )
+				{
+					_provider.ReportError( e.Message );
+				}
+			}
+		}
+
+		private void Update( )
+		{
+			_provider.Accessor.ResetAllLists( );
+			NotifyOfPropertyChange( ( ) => TableNames );
+		}
+
 		public void ConnectHander( )
 		{
 			SelectedItem = null;
 			SearchCriteria = null;
 			TableContent = null;
 			TableEditor = null;
-			NotifyOfPropertyChange( ( ) => TableNames );
+			Update( );
 		}
 
 		public event DisconnectHandler Disconnected;
