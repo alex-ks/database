@@ -1,0 +1,27 @@
+﻿Added table editor view
+
+Only view, values are stubs tonight;
+Column has been turned to model
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 1 and 1 different commit each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# Changes to be committed:
+#	modified:   Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient.Accessor/OracleAccessor.cs
+#	modified:   Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient.Accessor/StringLoader.cs
+#	modified:   Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient.Accessor/strings.xml
+#	modified:   Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient.csproj
+#	renamed:    Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient/ViewModels/Tabs/ColumnViewModel.cs -> Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient/Models/Column.cs
+#	modified:   Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient/ViewModels/Tabs/TableBrowserViewModel.cs
+#	new file:   Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient/ViewModels/Tabs/TableEditorViewModel.cs
+#	deleted:    Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient/Views/Tabs/ColumnView.xaml
+#	modified:   Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient/Views/Tabs/TableBrowserView.xaml
+#	modified:   Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient/Views/Tabs/TableContentView.xaml
+#	new file:   Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient/Views/Tabs/TableEditorView.xaml
+#	renamed:    Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient/Views/Tabs/ColumnView.xaml.cs -> Komissarov.Nsu.OracleClient/Komissarov.Nsu.OracleClient/Views/Tabs/TableEditorView.xaml.cs
+#
+
