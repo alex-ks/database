@@ -127,7 +127,6 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 
 				Columns = new ObservableCollection<Column>( names );
 			}
-			NotifyOfPropertyChange( ( ) => Columns );
 		}
 
 		private string AlterTable( )
@@ -214,8 +213,6 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 				
 				foreach ( Column column in Columns )
 					column.Created = false;
-
-				_created = false;
 
 				if ( TableEdited != null )
 					TableEdited( );
