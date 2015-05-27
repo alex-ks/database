@@ -129,7 +129,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			if ( SelectedItem == null )
 				return;
 
-			if ( MessageBox.Show( "Are you shure you want to delete table " + SelectedItem + '?', "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question ) == MessageBoxResult.Yes )
+			if ( MessageBox.Show( "Are you sure you want to delete table " + SelectedItem + '?', "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question ) == MessageBoxResult.Yes )
 			{
 				try
 				{
