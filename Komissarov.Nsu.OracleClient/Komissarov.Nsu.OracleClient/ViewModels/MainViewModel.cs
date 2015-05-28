@@ -58,20 +58,10 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 			get;
 		}
 
-		private TableBrowserViewModel _browser;
 		public TableBrowserViewModel Browser
 		{
-			set
-			{
-				if ( _browser == value )
-					return;
-				_browser = value;
-				NotifyOfPropertyChange( ( ) => Browser );
-			}
-			get
-			{
-				return _browser;
-			}
+			set;
+			get;
 		}
 
 		public MainViewModel( IWindowManager manager )
@@ -81,9 +71,9 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 			Connected = false;
 
 			QueryTab = new QueryViewModel( _manager, this );
-			QueryTab.RequireUpdate += UpdateHandler;
+			QueryTab.Disconnected += DisconnectedHandler;
 			Browser = new TableBrowserViewModel( _manager, this );
-			Browser.RequireUpdate += UpdateHandler;
+			Browser.Disconnected += DisconnectedHandler;
 		}
 
 		public void LogOut( )
@@ -124,10 +114,9 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 			MessageBox.Show( message, "Error", MessageBoxButton.OK, MessageBoxImage.Error );
 		}
 
-		public void UpdateHandler( )
+		public void DisconnectedHandler( )
 		{
-			Browser = new TableBrowserViewModel( _manager, this );
-			Accessor.ResetAllLists( );
+			//todo: handle disconnect
 		}
 
 		public OracleAccessor Accessor
