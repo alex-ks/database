@@ -13,7 +13,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 		private IWindowManager _manager;
 		private string _query;
 
-		public event DisconnectHandler Disconnected;
+		public event UpdateHandler RequireUpdate;
 
 		public string Query
 		{
@@ -41,12 +41,12 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 				var dataReader = _provider.Accessor.ExecuteQuery( Query );
 				ReportViewModel report = new ReportViewModel( dataReader );
 				_manager.ShowDialog( report );
+				if ( RequireUpdate != null )
+					RequireUpdate( );
 			}
 			catch ( OracleException e )
 			{
 				_provider.ReportError( e.Message );
-				if ( Disconnected != null )
-					Disconnected( );
 			}
 			catch ( InvalidOperationException )
 			{
