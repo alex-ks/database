@@ -23,6 +23,26 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			"CHAR", "VARCHAR", "VARCHAR2", "NCHAR", "NVARCHAR2"
 		};
 
+		private class ReportingCollection : ObservableCollection<Column>
+		{
+			public List<Column> ToDelete
+			{
+				private set;
+				get;
+			}
+
+			public ReportingCollection( IEnumerable<Column> source ) : base( source )
+			{
+				ToDelete = new List<Column>( );
+			}
+
+			protected override void RemoveItem( int index )
+			{
+				ToDelete.Add( this[index] );
+				base.RemoveItem( index );
+			}
+		}
+
 		private IAccessProvider _provider;
 		private bool _created, _nameModified = false;
 
@@ -143,7 +163,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 								SourceColumn = row["source_column"].ToString( )
 							};
 
-				Columns = new ObservableCollection<Column>( names );
+				Columns = new ReportingCollection( names );
 			}
 			NotifyOfPropertyChange( ( ) => Columns );
 		}
@@ -156,12 +176,22 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			List<string> result = new List<string>( );
 			int oldPKCount = 0, changedPKCount = 0;
 
+			foreach ( Column column in ( Columns as ReportingCollection ).ToDelete )
+			{
+				if ( column.Created )
+					continue;
+				builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
+				builder.Append( "DROP COLUMN " ).Append( ( column as EditableColumn ).OldName );
+				result.Add( builder.ToString( ) );
+				builder.Clear( );
+			}
+
 			foreach ( Column column in Columns )
 			{
 				if ( column.Created )
 				{
 					builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
-					builder.Append( "ADD COLUMN " ).Append( column.Name ).Append( ' ' ).Append( column.Type );
+					builder.Append( "ADD " ).Append( column.Name ).Append( ' ' ).Append( column.Type );
 
 					if ( TypesWithLength.Contains( column.Type ) )
 						builder.Append( '(' ).Append( DefaultLength ).Append( ')' );
