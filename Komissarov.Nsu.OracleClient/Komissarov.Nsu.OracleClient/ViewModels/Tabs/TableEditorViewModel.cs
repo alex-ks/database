@@ -112,7 +112,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			using ( var dataReader = _provider.Accessor.GetTableInfo( TableName ) )
 			{
 				var names = from DbDataRecord row in dataReader
-							select new Column( )
+							select new EditableColumn( )
 							{
 								Created = false,
 								Name = row[row.GetOrdinal( "column_name" )].ToString( ),
@@ -121,6 +121,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 								Nullable = row[row.GetOrdinal( "nullable" )].ToString( ).Equals( "Y" ),
 								PrimaryKey = row[row.GetOrdinal( "primary_key" )].ToString( ).Equals( "P" ),
 								ForeignKey = row[row.GetOrdinal( "foreign_key" )].ToString( ).Equals( "R" ),
+								FKName = row[row.GetOrdinal( "fk_symbol" )].ToString( ),
 								SourceTable = row[row.GetOrdinal( "source_table" )].ToString( ),
 								SourceColumn = row[row.GetOrdinal( "source_column" )].ToString( )
 							};

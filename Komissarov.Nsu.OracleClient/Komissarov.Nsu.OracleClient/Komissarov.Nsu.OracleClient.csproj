@@ -85,6 +85,7 @@
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="IAccessProvider.cs" />
     <Compile Include="IConnected.cs" />
+    <Compile Include="Models\EditableColumn.cs" />
     <Compile Include="ViewModels\AuthorizationViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Models\Column.cs" />

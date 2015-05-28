@@ -9,55 +9,55 @@ namespace Komissarov.Nsu.OracleClient.Models
 {
 	class Column
 	{
-		public bool Created
+		public virtual bool Created
 		{
 			set;
 			get;
 		}
 
-		public string Name
+		public virtual string Name
 		{
 			set;
 			get;
 		}
 
-		public string Type
+		public virtual string Type
 		{
 			set;
 			get;
 		}
 
-		public string Length
+		public virtual string Length
 		{
 			set;
 			get;
 		}
 
-		public bool Nullable
+		public virtual bool Nullable
 		{
 			set;
 			get;
 		}
 
-		public bool PrimaryKey
+		public virtual bool PrimaryKey
 		{
 			set;
 			get;
 		}
 
-		public bool ForeignKey
+		public virtual bool ForeignKey
 		{
 			set;
 			get;
 		}
 
-		public string SourceTable
+		public virtual string SourceTable
 		{
 			set;
 			get;
 		}
 
-		public string SourceColumn
+		public virtual string SourceColumn
 		{
 			set;
 			get;
