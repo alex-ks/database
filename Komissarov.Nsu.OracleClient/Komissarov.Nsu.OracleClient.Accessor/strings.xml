@@ -4,7 +4,7 @@
     SELECT column_name, data_type, nullable, primary_key, foreign_key, fk_symbol, source_table, source_column
     FROM
     (
-    SELECT column_name, data_type, nullable
+    SELECT column_name, data_type, nullable, column_id
     FROM all_tab_columns
     WHERE table_name = '{0}'
     ) LEFT JOIN
@@ -24,6 +24,7 @@
     AND constraint_type = 'R' AND all_constraints.table_name = '{0}'
     ) INNER JOIN all_cons_columns ON r_constraint_name = all_cons_columns.constraint_name AND position = ref_position
     ) ON column_name = foreign_name
+    ORDER BY column_id
   </string>
   <string name="TypeGettingQuery">
     SELECT type_name FROM all_types

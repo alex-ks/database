@@ -85,7 +85,10 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 
 		public void LogIn( )
 		{
-			AuthorizationViewModel authorization = new AuthorizationViewModel( );
+			AuthorizationViewModel authorization = new AuthorizationViewModel( )
+			{
+				DisplayName = "Authorization"
+			};
 			_manager.ShowDialog( authorization );
 
 			_accessor = authorization.Accessor;
@@ -102,7 +105,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 				report = new ReportViewModel( _accessor.GetTableInfo( "ROGOLEV_GOODS_RETURNED" ) );
 				_manager.ShowDialog( report );
 			}
-			else	
+			else
 				MessageBox.Show( "WAAAAAAAGH!", "Report" );
 		}
 

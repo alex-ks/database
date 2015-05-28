@@ -42,7 +42,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
-                                <ComboBox IsEnabled="{Binding Created}" SelectedValue="{Binding Type}" ItemsSource="{Binding ElementName=TableEditor, Path=DataContext.AvaliableTypes}"></ComboBox>
+                                <ComboBox SelectedValue="{Binding Type}" ItemsSource="{Binding ElementName=TableEditor, Path=DataContext.AvaliableTypes}"></ComboBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>

@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cal="http://www.caliburnproject.org"
-        Title="MainView" Height="450" Width="800">
+        Title="Oracle client" Height="450" Width="800">
     <Grid>
         <TabControl>
             <TabItem Header="Start page">

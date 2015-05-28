@@ -154,6 +154,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			List<Column> primaryList = new List<Column>( ), foreignAddList = new List<Column>( );
 			List<EditableColumn> foreignChangeList = new List<EditableColumn>( );
 			List<string> result = new List<string>( );
+			int oldPKCount = 0, changedPKCount = 0;
 
 			foreach ( Column column in Columns )
 			{
@@ -167,9 +168,15 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 
 					if ( !column.Nullable )
 						builder.Append( " NOT NULL" );
+					else
+						builder.Append( " NULL" );
 
 					if ( column.PrimaryKey )
+					{
 						primaryList.Add( column );
+						++changedPKCount;
+					}
+						
 					if ( column.ForeignKey )
 						foreignAddList.Add( column );
 
@@ -183,7 +190,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 					if ( eColumn.NameChanged )
 					{
 						builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
-						builder.Append( "RENAME COLUMN TO " ).Append( eColumn.Name );
+						builder.Append( "RENAME COLUMN ").Append( eColumn.OldName ).Append( " TO " ).Append( eColumn.Name );
 						result.Add( builder.ToString( ) );
 						builder.Clear( );
 					}
@@ -195,64 +202,92 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 						if ( TypesWithLength.Contains( eColumn.Type ) )
 							builder.Append( '(' ).Append( DefaultLength ).Append( ')' );
 
-						if ( eColumn.Nullable )
-							builder.Append( " NOT NULL" );
-
+						if ( eColumn.NullableChanged )
+						{
+							if ( !eColumn.Nullable )
+								builder.Append( " NOT NULL" );
+							else
+								builder.Append( " NULL" );
+						}
+						
 						result.Add( builder.ToString( ) );
 						builder.Clear( );
 					}
 					if ( eColumn.PrimaryChanged )
+						++changedPKCount;
+
+					if ( eColumn.PrimaryKey )
 						primaryList.Add( eColumn );
+
+					if ( ( eColumn.PrimaryKey && !eColumn.PrimaryChanged )
+						|| ( !eColumn.PrimaryKey && eColumn.PrimaryChanged ) )
+						++oldPKCount;
+
 					if ( eColumn.ForeignChanged )
 						foreignChangeList.Add( eColumn );
+				}
+			}
 
-					if ( primaryList.Count != 0 )
+			if ( changedPKCount != 0 )
+			{
+				if ( oldPKCount != 0 )
+				{
+					builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
+					builder.Append( "DROP PRIMARY KEY" );
+					result.Add( builder.ToString( ) );
+					builder.Clear( );
+				}
+
+				if ( primaryList.Count != 0 )
+				{
+					builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
+					builder.Append( "ADD PRIMARY KEY " ).Append( '(' );
+
+					foreach ( var column in primaryList )
+						builder.Append( column.Name ).Append( ',' );
+
+					builder.Remove( builder.Length - 1, 1 );
+					builder.Append( ')' );
+
+					result.Add( builder.ToString( ) );
+					builder.Clear( );
+				}
+			}
+
+			if ( foreignAddList.Count != 0 )
+			{
+				foreach ( Column refColumn in foreignAddList )
+				{
+					builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
+					builder.Append( "ADD FOREIGN KEY (" ).Append( refColumn.Name ).Append( ')' )
+						.Append( "REFERENCES " ).Append( refColumn.SourceTable ).Append( '(' )
+						.Append( refColumn.SourceColumn ).Append( ')' );
+
+					result.Add( builder.ToString( ) );
+					builder.Clear( );
+				}
+			}
+			if ( foreignChangeList.Count != 0 )
+			{
+				foreach ( EditableColumn refColumn in foreignChangeList )
+				{
+					if ( refColumn.OldForeignKey )
 					{
 						builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
-						builder.Append( "DROP PRIMARY KEY" );
-						result.Add( builder.ToString( ) );
-						builder.Clear( );
-
-						builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
-						builder.Append( "ADD PRIMARY KEY " ).Append( '(' ).Append( primaryList[0].Name );
-						for ( int i = 1; i < primaryList.Count; ++i )
-							builder.Append( ", " ).Append( primaryList[i] );
-						builder.Append( ')' );
-
+						builder.Append( "DROP CONSTRAINT " ).Append( refColumn.FKName );
 						result.Add( builder.ToString( ) );
 						builder.Clear( );
 					}
 
-					if ( foreignAddList.Count != 0 )
+					if ( refColumn.ForeignKey )
 					{
-						foreach ( Column refColumn in foreignAddList )
-						{
-							builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
-							builder.Append( "ADD FOREIGN KEY (" ).Append( column.Name ).Append( ')' )
-								.Append( "REFERENCES " ).Append( column.SourceTable ).Append( '(' )
-								.Append( column.SourceColumn ).Append( ')' );
+						builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
+						builder.Append( "ADD FOREIGN KEY (" ).Append( refColumn.Name ).Append( ')' )
+							.Append( "REFERENCES " ).Append( refColumn.SourceTable ).Append( '(' )
+							.Append( refColumn.SourceColumn ).Append( ')' );
 
-							result.Add( builder.ToString( ) );
-							builder.Clear( );
-						}
-					}
-					if ( foreignChangeList.Count != 0 )
-					{
-						foreach ( EditableColumn refColumn in foreignChangeList )
-						{
-							builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
-							builder.Append( "DROP CONSTRAINT " ).Append( refColumn.FKName );
-							result.Add( builder.ToString( ) );
-							builder.Clear( );
-
-							builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
-							builder.Append( "ADD FOREIGN KEY (" ).Append( column.Name ).Append( ')' )
-								.Append( "REFERENCES " ).Append( column.SourceTable ).Append( '(' )
-								.Append( column.SourceColumn ).Append( ')' );
-
-							result.Add( builder.ToString( ) );
-							builder.Clear( );
-						}
+						result.Add( builder.ToString( ) );
+						builder.Clear( );
 					}
 				}
 			}

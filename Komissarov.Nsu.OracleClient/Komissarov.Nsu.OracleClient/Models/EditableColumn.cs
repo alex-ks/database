@@ -21,15 +21,24 @@ namespace Komissarov.Nsu.OracleClient.Models
 		}
 
 		private string _name, _originalName;
+
+		public string OldName
+		{
+			get
+			{
+				return _originalName;
+			}
+		}
+
 		public override string Name
 		{
 			set
 			{
+				if ( _originalName == null )
+					_originalName = value;
 				if ( _name == value )
 					return;
 				_name = value;
-				if ( _originalName == null )
-					_originalName = value;
 				if ( _originalName == value )
 					NameChanged = false;
 				else
@@ -53,11 +62,11 @@ namespace Komissarov.Nsu.OracleClient.Models
 		{
 			set
 			{
+				if ( _originalType == null )
+					_originalType = value;
 				if ( _type == value )
 					return;
 				_type = value;
-				if ( _originalType == null )
-					_originalType = value;
 				if ( _originalType == value )
 					TypeChanged = false;
 				else
@@ -80,14 +89,15 @@ namespace Komissarov.Nsu.OracleClient.Models
 		{
 			set
 			{
+				if ( _nullCreated )
+				{
+					_originalNullable = _nullable = value;
+					_nullCreated = false;
+					return;
+				}
 				if ( _nullable == value )
 					return;
 				_nullable = value;
-				if ( _nullCreated )
-				{
-					_originalNullable = value;
-					_nullCreated = false;
-				}
 				if ( _originalNullable == value )
 					NullableChanged = false;
 				else
@@ -110,14 +120,15 @@ namespace Komissarov.Nsu.OracleClient.Models
 		{
 			set
 			{
+				if ( _primaryCreated )
+				{
+					_originalPrimary = _primary = value;
+					_primaryCreated = false;
+					return;
+				}
 				if ( _primary == value )
 					return;
 				_primary = value;
-				if ( _primaryCreated )
-				{
-					_originalPrimary = value;
-					_primaryCreated = false;
-				}
 				if ( _originalPrimary == value )
 					PrimaryChanged = false;
 				else
@@ -136,19 +147,28 @@ namespace Komissarov.Nsu.OracleClient.Models
 		}
 
 		private bool _foreign, _originalForeign, _foreignCreated = true;
+
+		public bool OldForeignKey
+		{
+			get
+			{
+				return _originalForeign;
+			}
+		}
+
 		public override bool ForeignKey
 		{
 			set
 			{
-				if ( _foreign == value )
-					return;
-				_foreign = value;
 				if ( _foreignCreated )
 				{
 					_foreignCreated = false;
-					_originalForeign = value;
+					_originalForeign = _foreign = value;
 					return;
 				}
+				if ( _foreign == value )
+					return;
+				_foreign = value;
 				if ( _foreign == _originalForeign
 					&& _sourceTable == _originalSourceTable
 					&& _sourceColumn == _originalSourceColumn )
@@ -174,14 +194,14 @@ namespace Komissarov.Nsu.OracleClient.Models
 		{
 			set
 			{
+				if ( _originalSourceTable == null )
+				{
+					_originalSourceTable = _sourceTable = value;
+					return;
+				}
 				if ( _sourceTable == value )
 					return;
 				_sourceTable = value;
-				if ( _originalSourceTable == null )
-				{
-					_originalSourceTable = value;
-					return;
-				}
 				if ( _foreign == _originalForeign
 					&& _sourceTable == _originalSourceTable
 					&& _sourceColumn == _originalSourceColumn )
@@ -200,14 +220,14 @@ namespace Komissarov.Nsu.OracleClient.Models
 		{
 			set
 			{
+				if ( _originalSourceColumn == null )
+				{
+					_originalSourceColumn = _sourceColumn = value;
+					return;
+				}
 				if ( _sourceColumn == value )
 					return;
 				_sourceColumn = value;
-				if ( _originalSourceColumn == null )
-				{
-					_originalSourceColumn = value;
-					return;
-				}
 				if ( _foreign == _originalForeign
 					&& _sourceTable == _originalSourceTable
 					&& _sourceColumn == _originalSourceColumn )
