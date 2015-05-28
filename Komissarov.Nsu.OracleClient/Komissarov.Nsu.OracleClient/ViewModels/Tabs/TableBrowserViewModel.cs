@@ -45,6 +45,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 				try
 				{
 					TableEditor = new TableEditorViewModel( _provider, _item );
+					TableEditor.TableEdited += Update;
 					TableContent = new TableContentViewModel( _provider, _item );
 				}
 				catch( OracleException e )

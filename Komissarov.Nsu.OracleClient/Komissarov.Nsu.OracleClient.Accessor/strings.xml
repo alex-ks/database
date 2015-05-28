@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <strings>
   <string name="InfoGettingQuery">
-    SELECT column_name, data_type, data_length, nullable, primary_key, foreign_key, fk_symbol, source_table, source_column
+    SELECT column_name, data_type, nullable, primary_key, foreign_key, fk_symbol, source_table, source_column
     FROM
     (
-    SELECT column_name, data_type, data_length, nullable
+    SELECT column_name, data_type, nullable
     FROM all_tab_columns
     WHERE table_name = '{0}'
     ) LEFT JOIN

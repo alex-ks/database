@@ -46,8 +46,6 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
-                    
-                    <DataGridTextColumn Header="Length" Binding="{Binding Length, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <DataGridCheckBoxColumn Header="Nullable" Binding="{Binding Nullable, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridCheckBoxColumn Header="Primary key" Binding="{Binding PrimaryKey, UpdateSourceTrigger=PropertyChanged}"/>

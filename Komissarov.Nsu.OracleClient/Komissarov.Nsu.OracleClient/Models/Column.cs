@@ -11,7 +11,7 @@ namespace Komissarov.Nsu.OracleClient.Models
 	{
 		public virtual bool Created
 		{
-			set;
+			protected set;
 			get;
 		}
 
@@ -22,12 +22,6 @@ namespace Komissarov.Nsu.OracleClient.Models
 		}
 
 		public virtual string Type
-		{
-			set;
-			get;
-		}
-
-		public virtual string Length
 		{
 			set;
 			get;

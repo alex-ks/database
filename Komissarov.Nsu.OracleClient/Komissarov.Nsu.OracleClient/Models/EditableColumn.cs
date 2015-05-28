@@ -10,7 +10,7 @@ namespace Komissarov.Nsu.OracleClient.Models
 	{
 		public override bool Created
 		{
-			set;
+			protected set;
 			get;
 		}
 
@@ -57,11 +57,8 @@ namespace Komissarov.Nsu.OracleClient.Models
 					return;
 				_type = value;
 				if ( _originalType == null )
-				{
 					_originalType = value;
-					return;
-				}
-				if ( _originalType == value && Length == _originalLength )
+				if ( _originalType == value )
 					TypeChanged = false;
 				else
 					TypeChanged = true;
@@ -69,30 +66,6 @@ namespace Komissarov.Nsu.OracleClient.Models
 			get
 			{
 				return _type;
-			}
-		}
-
-		private string _length, _originalLength;
-		public override string Length
-		{
-			set
-			{
-				if ( _length == value )
-					return;
-				_length = value;
-				if ( _originalLength == null )
-				{
-					_originalLength = value;
-					return;
-				}
-				if ( _originalLength == value && Type == _originalType )
-					TypeChanged = false;
-				else
-					TypeChanged = true;
-			}
-			get
-			{
-				return _length;
 			}
 		}
 

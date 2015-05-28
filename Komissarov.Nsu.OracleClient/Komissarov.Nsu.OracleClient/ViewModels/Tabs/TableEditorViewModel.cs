@@ -16,12 +16,19 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 
 	class TableEditorViewModel : PropertyChangedBase
 	{
+		private const int DefaultLength = 256;
+
+		private static HashSet<string> TypesWithLength = new HashSet<string>( )
+		{
+			"CHAR", "VARCHAR", "VARCHAR2", "NCHAR", "NVARCHAR2"
+		};
+
 		private IAccessProvider _provider;
 		private bool _created, _nameModified = false;
 
 		public event EditHandle TableEdited;
 
-		private string _tableName;
+		private string _tableName, _originalName;
 		public string TableName
 		{
 			set
@@ -30,7 +37,19 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 					return;
 
 				_tableName = value;
-				_nameModified = true;
+
+				if ( _created )
+					return;
+
+				NotifyOfPropertyChange( ( ) => TableName );
+
+				if ( _originalName == null )
+					_originalName = value;
+
+				if ( _originalName == _tableName )
+					_nameModified = false;
+				else
+					_nameModified = true;
 			}
 			get
 			{
@@ -114,16 +133,14 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 				var names = from DbDataRecord row in dataReader
 							select new EditableColumn( )
 							{
-								Created = false,
-								Name = row[row.GetOrdinal( "column_name" )].ToString( ),
-								Type = row[row.GetOrdinal( "data_type" )].ToString( ),
-								Length = row[row.GetOrdinal( "data_length" )].ToString( ),
-								Nullable = row[row.GetOrdinal( "nullable" )].ToString( ).Equals( "Y" ),
-								PrimaryKey = row[row.GetOrdinal( "primary_key" )].ToString( ).Equals( "P" ),
-								ForeignKey = row[row.GetOrdinal( "foreign_key" )].ToString( ).Equals( "R" ),
-								FKName = row[row.GetOrdinal( "fk_symbol" )].ToString( ),
-								SourceTable = row[row.GetOrdinal( "source_table" )].ToString( ),
-								SourceColumn = row[row.GetOrdinal( "source_column" )].ToString( )
+								Name = row["column_name"].ToString( ),
+								Type = row["data_type"].ToString( ),
+								Nullable = row["nullable"].ToString( ).Equals( "Y" ),
+								PrimaryKey = row["primary_key"].ToString( ).Equals( "P" ),
+								ForeignKey = row["foreign_key"].ToString( ).Equals( "R" ),
+								FKName = row["fk_symbol"].ToString( ),
+								SourceTable = row["source_table"].ToString( ),
+								SourceColumn = row["source_column"].ToString( )
 							};
 
 				Columns = new ObservableCollection<Column>( names );
@@ -131,14 +148,20 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			NotifyOfPropertyChange( ( ) => Columns );
 		}
 
-		private string AlterTable( )
+		private List<string> AlterTable( )
 		{
-			StringBuilder builder = new StringBuilder( "ALTER TABLE " );
+			StringBuilder builder = new StringBuilder( );
 			//todo: make alter table query
-			return builder.ToString( );
+			foreach ( Column column in Columns )
+			{
+				builder.Append( "ALTER TABLE " ).Append( _originalName );
+			}
+
+
+			return new List<string>( ) { builder.ToString( ) };
 		}
 
-		private string CreateTable( )
+		private List<string> CreateTable( )
 		{
 			StringBuilder builder = new StringBuilder( "CREATE TABLE " );
 			builder.Append( _tableName ).Append( " ( " );
@@ -151,8 +174,8 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 				builder.Append( Columns[0].Name ).Append( ' ' )
 					.Append( Columns[0].Type );
 
-				if ( Columns[0].Length != null )
-					builder.Append( "( " ).Append( Columns[0].Length ).Append( " )" );
+				if ( TypesWithLength.Contains( Columns[0].Type ) )
+					builder.Append( "( " ).Append( DefaultLength ).Append( " )" );
 				
 				builder.Append( ' ' );
 
@@ -169,8 +192,8 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 					builder.Append( ", " ).Append( Columns[i].Name ).Append( ' ' )
 						.Append( Columns[i].Type );
 
-					if ( Columns[i].Length != null )
-						builder.Append( "( " ).Append( Columns[i].Length ).Append( " )" );
+					if ( TypesWithLength.Contains( Columns[i].Type ) )
+						builder.Append( "( " ).Append( DefaultLength ).Append( " )" );
 					builder.Append( ' ' );
 
 					if ( !Columns[i].Nullable )
@@ -203,25 +226,26 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 
 			builder.Append( " )" );
 
-			return builder.ToString( );
+			return new List<string>( ) { builder.ToString( ) };
 		}
 
 		public void CommitChanges( )
 		{
-			string query = _created ? CreateTable( ) : AlterTable( );
+			List<string> queryList = _created ? CreateTable( ) : AlterTable( );
 			try
 			{
-				_provider.Accessor.ExecuteQuery( query ).Dispose( );
-				
-				foreach ( Column column in Columns )
-					column.Created = false;
+				foreach ( string query in queryList )
+					_provider.Accessor.ExecuteQuery( query ).Dispose( );
 
-				_created = false;
+				TableName = _tableName.ToUpper( );
 
 				if ( TableEdited != null )
 					TableEdited( );
 
 				MessageBox.Show( "Table successfully " + ( _created ? "created" : "edited" ), "Report", MessageBoxButton.OK, MessageBoxImage.Information );
+
+				_created = false;
+				LoadTableData( );
 			}
 			catch ( OracleException e )
 			{

@@ -61,10 +61,10 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 				using ( var dataReader = command.ExecuteReader( ) )
 				{
 					var names = from DbDataRecord row in dataReader
-								where !row[row.GetOrdinal( "owner" )].ToString( ).Equals( "SYS" )
-								&& ( _tablespace == null || row[row.GetOrdinal( "tablespace_name" )].ToString( ).Equals( _tablespace ) )
-								orderby row[row.GetOrdinal( "table_name" )]
-								select row[row.GetOrdinal( "table_name" )].ToString( );
+								where !row["owner"].ToString( ).Equals( "SYS" )
+								&& ( _tablespace == null || row["tablespace_name"].ToString( ).Equals( _tablespace ) )
+								orderby row["table_name"]
+								select row["table_name"].ToString( );
 
 					_avaliableTables = names.ToList( );
 				}
@@ -86,8 +86,9 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 				using ( var dataReader = command.ExecuteReader( ) )
 				{
 					var names = from DbDataRecord row in dataReader
-								orderby row[row.GetOrdinal( "type_name" )]
-								select row[row.GetOrdinal( "type_name" )].ToString( );
+								where !row["type_name"].ToString( ).Contains(' ')
+								orderby row["type_name"]
+								select row["type_name"].ToString( );
 
 					_avaliableTypes = names.ToList( );
 				}
