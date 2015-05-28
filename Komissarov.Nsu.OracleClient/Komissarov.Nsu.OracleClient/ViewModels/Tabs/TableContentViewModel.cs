@@ -63,6 +63,6 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			}	
 		}
 
-		public event DisconnectHandler Disconnected;
+		public event UpdateHandler RequireUpdate;
 	}
 }

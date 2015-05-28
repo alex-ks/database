@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Komissarov.Nsu.OracleClient
 {
-	public delegate void DisconnectHandler( );
+	public delegate void UpdateHandler( );
 
 	interface IConnected
 	{
-		event DisconnectHandler Disconnected;
+		event UpdateHandler RequireUpdate;
 	}
 }
