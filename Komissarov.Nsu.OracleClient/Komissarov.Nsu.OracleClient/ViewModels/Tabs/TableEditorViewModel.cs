@@ -151,14 +151,121 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 		private List<string> AlterTable( )
 		{
 			StringBuilder builder = new StringBuilder( );
-			//todo: make alter table query
+			List<Column> primaryList = new List<Column>( ), foreignAddList = new List<Column>( );
+			List<EditableColumn> foreignChangeList = new List<EditableColumn>( );
+			List<string> result = new List<string>( );
+
 			foreach ( Column column in Columns )
 			{
-				builder.Append( "ALTER TABLE " ).Append( _originalName );
+				if ( column.Created )
+				{
+					builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
+					builder.Append( "ADD COLUMN " ).Append( column.Name ).Append( ' ' ).Append( column.Type );
+
+					if ( TypesWithLength.Contains( column.Type ) )
+						builder.Append( '(' ).Append( DefaultLength ).Append( ')' );
+
+					if ( !column.Nullable )
+						builder.Append( " NOT NULL" );
+
+					if ( column.PrimaryKey )
+						primaryList.Add( column );
+					if ( column.ForeignKey )
+						foreignAddList.Add( column );
+
+					result.Add( builder.ToString( ) );
+					builder.Clear( );
+				}
+				else
+				{
+					EditableColumn eColumn = column as EditableColumn;
+
+					if ( eColumn.NameChanged )
+					{
+						builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
+						builder.Append( "RENAME COLUMN TO " ).Append( eColumn.Name );
+						result.Add( builder.ToString( ) );
+						builder.Clear( );
+					}
+					if ( eColumn.TypeChanged || eColumn.NullableChanged )
+					{
+						builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
+						builder.Append( "MODIFY " ).Append( column.Name ).Append( ' ' ).Append( eColumn.Type );
+
+						if ( TypesWithLength.Contains( eColumn.Type ) )
+							builder.Append( '(' ).Append( DefaultLength ).Append( ')' );
+
+						if ( eColumn.Nullable )
+							builder.Append( " NOT NULL" );
+
+						result.Add( builder.ToString( ) );
+						builder.Clear( );
+					}
+					if ( eColumn.PrimaryChanged )
+						primaryList.Add( eColumn );
+					if ( eColumn.ForeignChanged )
+						foreignChangeList.Add( eColumn );
+
+					if ( primaryList.Count != 0 )
+					{
+						builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
+						builder.Append( "DROP PRIMARY KEY" );
+						result.Add( builder.ToString( ) );
+						builder.Clear( );
+
+						builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
+						builder.Append( "ADD PRIMARY KEY " ).Append( '(' ).Append( primaryList[0].Name );
+						for ( int i = 1; i < primaryList.Count; ++i )
+							builder.Append( ", " ).Append( primaryList[i] );
+						builder.Append( ')' );
+
+						result.Add( builder.ToString( ) );
+						builder.Clear( );
+					}
+
+					if ( foreignAddList.Count != 0 )
+					{
+						foreach ( Column refColumn in foreignAddList )
+						{
+							builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
+							builder.Append( "ADD FOREIGN KEY (" ).Append( column.Name ).Append( ')' )
+								.Append( "REFERENCES " ).Append( column.SourceTable ).Append( '(' )
+								.Append( column.SourceColumn ).Append( ')' );
+
+							result.Add( builder.ToString( ) );
+							builder.Clear( );
+						}
+					}
+					if ( foreignChangeList.Count != 0 )
+					{
+						foreach ( EditableColumn refColumn in foreignChangeList )
+						{
+							builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
+							builder.Append( "DROP CONSTRAINT " ).Append( refColumn.FKName );
+							result.Add( builder.ToString( ) );
+							builder.Clear( );
+
+							builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' );
+							builder.Append( "ADD FOREIGN KEY (" ).Append( column.Name ).Append( ')' )
+								.Append( "REFERENCES " ).Append( column.SourceTable ).Append( '(' )
+								.Append( column.SourceColumn ).Append( ')' );
+
+							result.Add( builder.ToString( ) );
+							builder.Clear( );
+						}
+					}
+				}
 			}
 
+			if ( _nameModified )
+			{
+				builder.Append( "ALTER TABLE " ).Append( _originalName ).Append( ' ' )
+					.Append( "RENAME TO " ).Append( _tableName );
+				result.Add( builder.ToString( ) );
+				builder.Clear( );
+			}
 
-			return new List<string>( ) { builder.ToString( ) };
+			return result;
 		}
 
 		private List<string> CreateTable( )
@@ -176,7 +283,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 
 				if ( TypesWithLength.Contains( Columns[0].Type ) )
 					builder.Append( "( " ).Append( DefaultLength ).Append( " )" );
-				
+
 				builder.Append( ' ' );
 
 				if ( !Columns[0].Nullable )
@@ -247,7 +354,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 				_created = false;
 				LoadTableData( );
 			}
-			catch ( OracleException e )
+			catch ( Exception e )
 			{
 				_provider.ReportError( e.Message );
 			}

@@ -27,7 +27,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0" Text="Table name:" Margin="5"/>
-                <TextBox Text="{Binding TableName}" Grid.Column="1" Margin="0 2.5 0 2.5"/>
+                <TextBox Text="{Binding TableName, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="0 2.5 0 2.5"/>
             </Grid>
 
             <DataGrid Grid.Row="1" CanUserReorderColumns="False" AutoGenerateColumns="False" ItemsSource="{Binding Columns}" SelectedItem="{Binding SelectedColumn, UpdateSourceTrigger=PropertyChanged}">
