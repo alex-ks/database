@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 {
-	class TableContentViewModel : PropertyChangedBase, IConnected
+	class TableContentViewModel : PropertyChangedBase, IConnected, IDisposable
 	{
 		private IAccessProvider _provider;
 		private string _tableName;
@@ -21,6 +21,8 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			{
 				if ( _table == value )
 					return;
+				if ( _table != null )
+					_table.Dispose( );
 				_table = value;
 				NotifyOfPropertyChange( ( ) => TableContent );
 			}
@@ -64,5 +66,11 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 		}
 
 		public event UpdateHandler RequireUpdate;
+
+		public void Dispose( )
+		{
+			if ( TableContent != null )
+				TableContent.Dispose( );
+		}
 	}
 }

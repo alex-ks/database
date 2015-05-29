@@ -62,7 +62,7 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 				{
 					var names = from DbDataRecord row in dataReader
 								where !row["owner"].ToString( ).Equals( "SYS" )
-								&& ( _tablespace == null || row["tablespace_name"].ToString( ).Equals( _tablespace ) )
+								&& ( _tablespace == null || _tablespace.Equals( "" ) || row["tablespace_name"].ToString( ).Equals( _tablespace ) )
 								orderby row["table_name"]
 								select row["table_name"].ToString( );
 
@@ -126,9 +126,13 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 				command.CommandText = string.Format( "select * from {0}", tableName );
 				using ( OracleDataAdapter adapter = new OracleDataAdapter( command ) )
 				{
-					OracleCommandBuilder builder = new OracleCommandBuilder( adapter );
-					adapter.UpdateCommand = builder.GetUpdateCommand( );
-					adapter.Update( table );
+					using ( OracleCommandBuilder builder = new OracleCommandBuilder( adapter ) )
+					{
+						adapter.UpdateCommand = builder.GetUpdateCommand( );
+						adapter.InsertCommand = builder.GetInsertCommand( );
+						adapter.DeleteCommand = builder.GetDeleteCommand( );
+						adapter.Update( table );
+					}
 				}
 			}
 		}
@@ -141,6 +145,7 @@ namespace Komissarov.Nsu.OracleClient.Accessor
 
 		public void Dispose( )
 		{
+			_connection.Close( );
 			_connection.Dispose( );
 		}
 	}

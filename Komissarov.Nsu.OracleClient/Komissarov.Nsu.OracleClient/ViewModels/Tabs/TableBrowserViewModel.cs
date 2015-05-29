@@ -37,21 +37,29 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 
 				if ( _item == null )
 				{
+					if ( TableContent != null )
+						TableContent.Dispose( );
 					TableContent = null;
 					TableEditor = null;
 					return;
 				}
-					
+
 				try
 				{
 					TableEditor = new TableEditorViewModel( _provider, _item );
 					TableEditor.TableEdited += Update;
+					if ( TableContent != null )
+						TableContent.Dispose( );
 					TableContent = new TableContentViewModel( _provider, _item );
 				}
-				catch( OracleException e )
+				catch ( OracleException e )
 				{
 					SelectedItem = null;
 					_provider.ReportError( e.Message );
+				}
+				catch ( Exception e )
+				{
+					SelectedItem = null;
 				}
 			}
 			get
@@ -86,6 +94,8 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 			{
 				if ( value == _tableContent )
 					return;
+				if ( _tableContent != null )
+					_tableContent.Dispose( );
 				_tableContent = value;
 				NotifyOfPropertyChange( ( ) => TableContent );
 			}
@@ -122,6 +132,8 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 		{
 			TableEditor = new TableEditorViewModel( _provider, null );
 			TableEditor.TableEdited += Update;
+			if ( TableContent != null )
+				TableContent.Dispose( );
 			TableContent = new TableContentViewModel( _provider, null );
 		}
 
@@ -150,6 +162,8 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 		{
 			_provider.Accessor.ResetAllLists( );
 			NotifyOfPropertyChange( ( ) => TableNames );
+			if ( TableEditor != null )
+				SelectedItem = TableEditor.TableName;
 		}
 
 		public void ConnectHander( )

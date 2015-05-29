@@ -411,13 +411,12 @@ namespace Komissarov.Nsu.OracleClient.ViewModels.Tabs
 
 				TableName = _tableName.ToUpper( );
 
-				if ( TableEdited != null )
-					TableEdited( );
-
 				MessageBox.Show( "Table successfully " + ( _created ? "created" : "edited" ), "Report", MessageBoxButton.OK, MessageBoxImage.Information );
 
 				_created = false;
-				LoadTableData( );
+
+				if ( TableEdited != null )
+					TableEdited( );
 			}
 			catch ( Exception e )
 			{

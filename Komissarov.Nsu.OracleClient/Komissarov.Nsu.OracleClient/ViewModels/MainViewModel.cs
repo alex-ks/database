@@ -109,14 +109,7 @@ namespace Komissarov.Nsu.OracleClient.ViewModels
 
 		public void MakeReport( )
 		{
-			ReportViewModel report;
-			if ( _accessor != null )
-			{
-				report = new ReportViewModel( _accessor.GetTableInfo( "ROGOLEV_GOODS_RETURNED" ) );
-				_manager.ShowDialog( report );
-			}
-			else
-				MessageBox.Show( "WAAAAAAAGH!", "Report" );
+			MessageBox.Show( "Oracle client v1.0 build 33" + Environment.NewLine + "Developed by Alexander Inc." + Environment.NewLine + "All rights reserved", "About", MessageBoxButton.OK, MessageBoxImage.Asterisk );
 		}
 
 		public void ReportError( string message )
